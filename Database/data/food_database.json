@@ -1,0 +1,395 @@
+[
+  {
+    "food_name": "poha with roasted peanuts",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 280,
+    "protein": 7.5,
+    "carbs": 44.0,
+    "fat": 8.0,
+    "sugar": 3.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Flattened Rice / Poha (150g)",
+      "Roasted Peanuts (25g)",
+      "Diced Onions & Green Peas (60g)",
+      "Mustard Seeds, Curry Leaves & Green Chilli (10g)",
+      "Fresh Lemon Juice & Coriander Leaves (10g)"
+    ]
+  },
+  {
+    "food_name": "moong dal chilla with mint chutney",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 260,
+    "protein": 14.0,
+    "carbs": 36.0,
+    "fat": 6.0,
+    "sugar": 2.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Yellow Moong Dal Batter (180g)",
+      "Finely Chopped Onions & Ginger (35g)",
+      "Fresh Mint & Coriander Chutney (30g)",
+      "Cold-Pressed Mustard Oil (5g)"
+    ]
+  },
+  {
+    "food_name": "boiled eggs with whole wheat toast",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 290,
+    "protein": 18.0,
+    "carbs": 26.0,
+    "fat": 11.5,
+    "sugar": 2.0,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Farm Boiled Eggs (2 large - 100g)",
+      "Whole Wheat Bread (2 slices - 60g)",
+      "Sliced Cucumber & Tomato (70g)",
+      "Cracked Black Pepper & Rock Salt (2g)"
+    ]
+  },
+  {
+    "food_name": "paneer bhurji with 2 phulkas",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 380,
+    "protein": 19.5,
+    "carbs": 38.0,
+    "fat": 16.0,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian"],
+    "ingredients": [
+      "Fresh Malai Paneer Crumbled (120g)",
+      "Whole Wheat Phulkas / Rotis (2 pcs - 70g)",
+      "Sautéed Tomatoes, Onions & Green Chillies (70g)",
+      "Cumin & Turmeric Tadka with Ghee (5g)"
+    ]
+  },
+  {
+    "food_name": "masala egg omelette with phulka",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 310,
+    "protein": 16.5,
+    "carbs": 24.0,
+    "fat": 14.0,
+    "sugar": 2.0,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Eggs (2 whole - 100g)",
+      "Whole Wheat Phulka (1 pc - 35g)",
+      "Chopped Onions, Tomatoes & Green Chilli (50g)",
+      "Mustard Oil (5g)",
+      "Fresh Coriander Leaves (10g)"
+    ]
+  },
+  {
+    "food_name": "steamed idli sambar with coconut chutney",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 270,
+    "protein": 8.0,
+    "carbs": 48.0,
+    "fat": 5.0,
+    "sugar": 3.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Steamed Rice & Urad Dal Idlis (3 pcs - 180g)",
+      "Mixed Veggie Toor Dal Sambar (150g)",
+      "Fresh Coconut & Roasted Chana Chutney (30g)"
+    ]
+  },
+  {
+    "food_name": "vegetable upma with curd",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 290,
+    "protein": 9.0,
+    "carbs": 45.0,
+    "fat": 7.0,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian"],
+    "ingredients": [
+      "Roasted Semolina / Rava (120g)",
+      "Fresh Plain Curd / Dahi (80g)",
+      "Diced Carrots, French Beans & Peas (70g)",
+      "Mustard Seeds & Curry Leaves Tadka (8g)"
+    ]
+  },
+  {
+    "food_name": "besan chilla with mint chutney",
+    "meal_slot": "breakfast",
+    "category": "Breakfast",
+    "calories": 250,
+    "protein": 11.0,
+    "carbs": 34.0,
+    "fat": 6.5,
+    "sugar": 2.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Gram Flour / Besan Batter (140g)",
+      "Chopped Onions, Tomatoes & Ajwain (45g)",
+      "Spicy Mint & Coriander Chutney (30g)",
+      "Cold-Pressed Sesame / Mustard Oil (5g)"
+    ]
+  },
+  {
+    "food_name": "dal tadka with 2 phulkas and salad",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 420,
+    "protein": 16.0,
+    "carbs": 68.0,
+    "fat": 8.5,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Yellow Toor Dal (160g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Kachumber Salad of Cucumber, Onion & Tomato (100g)",
+      "Cumin & Garlic Tadka with Mustard Oil (7g)"
+    ]
+  },
+  {
+    "food_name": "chicken curry with steamed rice and salad",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 510,
+    "protein": 34.0,
+    "carbs": 58.0,
+    "fat": 14.0,
+    "sugar": 3.0,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Tender Chicken Curry Cut (150g)",
+      "Steamed Basmati Rice (150g)",
+      "Traditional Onion-Tomato-Ginger Gravy (90g)",
+      "Fresh Sliced Cucumber & Green Chilli (60g)"
+    ]
+  },
+  {
+    "food_name": "rajma masala with jeera rice",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 460,
+    "protein": 17.5,
+    "carbs": 76.0,
+    "fat": 8.0,
+    "sugar": 4.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Slow-Cooked Kashmiri Rajma (170g)",
+      "Fragrant Jeera Rice (150g)",
+      "Spiced Onion-Tomato Masala (70g)",
+      "Pickled Red Onion Rings & Lemon Wedge (40g)"
+    ]
+  },
+  {
+    "food_name": "palak paneer with 2 phulkas",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 440,
+    "protein": 20.0,
+    "carbs": 42.0,
+    "fat": 20.0,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian"],
+    "ingredients": [
+      "Blanched Spinach Puree Gravy (170g)",
+      "Fresh Paneer Cubes (110g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Garlic & Cumin Seasoning (6g)"
+    ]
+  },
+  {
+    "food_name": "egg curry with 2 phulkas and cucumber",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 430,
+    "protein": 20.0,
+    "carbs": 44.0,
+    "fat": 18.0,
+    "sugar": 3.5,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Hard Boiled Eggs (2 pcs - 100g)",
+      "Homestyle Spiced Onion Gravy (120g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Fresh Crisp Cucumber Slices (60g)"
+    ]
+  },
+  {
+    "food_name": "fish curry with steamed rice",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 460,
+    "protein": 28.0,
+    "carbs": 56.0,
+    "fat": 12.0,
+    "sugar": 2.5,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Fresh Rohu / Pomfret Fish Steak (150g)",
+      "Steamed White Rice (150g)",
+      "Mustard & Fenugreek Seed Tomato Gravy (90g)",
+      "Green Chilli & Sliced Red Onion (35g)"
+    ]
+  },
+  {
+    "food_name": "chana masala with 2 phulkas",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 430,
+    "protein": 16.0,
+    "carbs": 69.0,
+    "fat": 9.0,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Boiled Kabuli Chana / Chickpeas (160g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Tangy Tomato & Amchur Gravy (80g)",
+      "Fresh Cucumber & Radish Salad (60g)"
+    ]
+  },
+  {
+    "food_name": "soya chunk curry with 2 rotis",
+    "meal_slot": "lunch",
+    "category": "Lunch",
+    "calories": 410,
+    "protein": 24.0,
+    "carbs": 52.0,
+    "fat": 10.0,
+    "sugar": 3.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Nutrela Soya Chunks (140g prepared)",
+      "Whole Wheat Rotis (2 pcs - 70g)",
+      "Spiced Green Peas & Onion Gravy (90g)",
+      "Lemon & Carrot Salad (50g)"
+    ]
+  },
+  {
+    "food_name": "moong dal khichdi with dahi and papad",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 390,
+    "protein": 15.0,
+    "carbs": 62.0,
+    "fat": 8.0,
+    "sugar": 4.0,
+    "dietary_flags": ["vegetarian", "non-vegetarian"],
+    "ingredients": [
+      "Split Green Moong & Rice Khichdi (220g)",
+      "Fresh Plain Curd / Dahi (100g)",
+      "Roasted Urad Dal Papad (1 pc - 15g)",
+      "Desi Ghee & Cumin Tadka (5g)",
+      "Fresh Cucumber Sticks (50g)"
+    ]
+  },
+  {
+    "food_name": "tandoori grilled chicken with salad",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 390,
+    "protein": 38.0,
+    "carbs": 12.0,
+    "fat": 18.0,
+    "sugar": 2.5,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Tandoori Spiced Chicken Breast (180g)",
+      "Lemon Mustard Marinade (25g)",
+      "Crisp Onion & Bell Pepper Salad (100g)",
+      "Tangy Mint & Coriander Chutney (30g)"
+    ]
+  },
+  {
+    "food_name": "egg bhurji with 2 phulkas",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 360,
+    "protein": 18.5,
+    "carbs": 38.0,
+    "fat": 14.0,
+    "sugar": 3.0,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Spiced Scrambled Eggs (2 pcs - 100g)",
+      "Finely Diced Onions, Tomatoes & Green Chilli (60g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Fresh Coriander Garnish (10g)"
+    ]
+  },
+  {
+    "food_name": "lauki chana dal with 2 phulkas",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 340,
+    "protein": 14.0,
+    "carbs": 54.0,
+    "fat": 6.5,
+    "sugar": 4.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Bottle Gourd / Lauki & Bengal Gram Dal (180g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Hing, Cumin & Turmeric Tadka (6g)",
+      "Fresh Sliced Tomato Salad (60g)"
+    ]
+  },
+  {
+    "food_name": "paneer tikka with mint chutney and onion salad",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 380,
+    "protein": 22.0,
+    "carbs": 16.0,
+    "fat": 24.0,
+    "sugar": 3.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian"],
+    "ingredients": [
+      "Char-Grilled Cottage Cheese / Paneer (140g)",
+      "Diced Capsicum & Red Onion Cubes (80g)",
+      "Hung Curd & Ajwain Marinade (30g)",
+      "Spicy Mint Chutney with Lemon (25g)"
+    ]
+  },
+  {
+    "food_name": "yellow moong dal with 2 phulkas and bhindi",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 350,
+    "protein": 15.0,
+    "carbs": 56.0,
+    "fat": 7.0,
+    "sugar": 3.5,
+    "dietary_flags": ["vegetarian", "non-vegetarian", "vegan", "lactose-free"],
+    "ingredients": [
+      "Homestyle Yellow Moong Dal (160g)",
+      "Whole Wheat Phulkas (2 pcs - 70g)",
+      "Lightly Sautéed Bhindi / Okra Masala (90g)",
+      "Lemon Juice & Jeera Seasoning (5g)"
+    ]
+  },
+  {
+    "food_name": "grilled fish fillet with cucumber carrot salad",
+    "meal_slot": "dinner",
+    "category": "Dinner",
+    "calories": 340,
+    "protein": 32.0,
+    "carbs": 10.0,
+    "fat": 15.0,
+    "sugar": 2.0,
+    "dietary_flags": ["non-vegetarian", "lactose-free"],
+    "ingredients": [
+      "Grilled Fish Fillet (160g)",
+      "Cracked Black Pepper, Ajwain & Lemon Rub (15g)",
+      "Carrot & Cucumber Sticks Salad (100g)",
+      "Green Mint Dressing (20g)"
+    ]
+  }
+]
