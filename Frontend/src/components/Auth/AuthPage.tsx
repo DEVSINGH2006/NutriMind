@@ -68,7 +68,6 @@ export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, register, isLoading } = useUser();
   const [formError, setFormError] = useState<string | null>(null);
-  const [socialNotice, setSocialNotice] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -245,77 +244,13 @@ export default function AuthPage() {
                 {isLogin ? 'Welcome Back!' : 'Create Account'}
               </Typography>
 
-              {isLogin && (
-                <Box
-                  sx={{
-                    mb: 2,
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                    border: `1px dashed ${alpha(theme.palette.primary.main, 0.3)}`,
-                  }}
-                >
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: 'block',
-                      fontWeight: 700,
-                      color: theme.palette.primary.main,
-                      mb: 0.8,
-                      letterSpacing: '0.3px',
-                    }}
-                  >
-                    PRE-CONFIGURED ACCOUNTS (PASSWORD: password123)
-                  </Typography>
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                    <Chip
-                      label="Demo: demo"
-                      size="small"
-                      clickable
-                      color="primary"
-                      variant="outlined"
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          email: 'demo',
-                          password: 'password123',
-                        })
-                      }
-                      sx={{ fontWeight: 600 }}
-                    />
-                    <Chip
-                      label="Test: test"
-                      size="small"
-                      clickable
-                      color="secondary"
-                      variant="outlined"
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          email: 'test',
-                          password: 'password123',
-                        })
-                      }
-                      sx={{ fontWeight: 600 }}
-                    />
-                  </Box>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ display: 'block', mt: 0.8, fontSize: '0.75rem' }}
-                  >
-                    New users must click <strong>Sign Up</strong> below to register an account.
-                  </Typography>
-                </Box>
-              )}
-
               <Box
                 component="form"
                 onSubmit={handleSubmit}
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 2,
+                  gap: 2.5,
                 }}
               >
                 {!isLogin && (
@@ -328,9 +263,11 @@ export default function AuthPage() {
                       value={formData.username}
                       onChange={handleChange}
                       variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      placeholder="e.g. johndoe"
                       sx={{
                         '& .MuiOutlinedInput-root': {
-                          bgcolor: alpha(theme.palette.background.paper, 0.8),
+                          bgcolor: alpha(theme.palette.background.paper, 0.9),
                           '&:hover fieldset': {
                             borderColor: theme.palette.primary.main,
                           },
@@ -345,9 +282,11 @@ export default function AuthPage() {
                       value={formData.displayName}
                       onChange={handleChange}
                       variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      placeholder="e.g. John Doe"
                       sx={{
                         '& .MuiOutlinedInput-root': {
-                          bgcolor: alpha(theme.palette.background.paper, 0.8),
+                          bgcolor: alpha(theme.palette.background.paper, 0.9),
                           '&:hover fieldset': {
                             borderColor: theme.palette.primary.main,
                           },
@@ -366,9 +305,11 @@ export default function AuthPage() {
                   value={formData.email}
                   onChange={handleChange}
                   variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                  placeholder="name@example.com"
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      bgcolor: alpha(theme.palette.background.paper, 0.8),
+                      bgcolor: alpha(theme.palette.background.paper, 0.9),
                       '&:hover fieldset': {
                         borderColor: theme.palette.primary.main,
                       },
@@ -385,9 +326,11 @@ export default function AuthPage() {
                   value={formData.password}
                   onChange={handleChange}
                   variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                  placeholder="Enter your password"
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      bgcolor: alpha(theme.palette.background.paper, 0.8),
+                      bgcolor: alpha(theme.palette.background.paper, 0.9),
                       '&:hover fieldset': {
                         borderColor: theme.palette.primary.main,
                       },
@@ -426,7 +369,7 @@ export default function AuthPage() {
                   disabled={isLoading}
                   sx={{
                     py: 1.5,
-                    mt: 2,
+                    mt: 1,
                     fontSize: '1.1rem',
                     fontWeight: 600,
                     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -444,33 +387,31 @@ export default function AuthPage() {
                   )}
                 </Button>
 
-                <Divider sx={{ my: 3 }}>
-                  <Typography color="text.secondary" sx={{ px: 2 }}>
+                <Divider sx={{ my: 2 }}>
+                  <Typography color="text.secondary" sx={{ px: 2, fontSize: '0.9rem' }}>
                     OR
                   </Typography>
                 </Divider>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                   {socialButtons.map(({ icon, label, color }) => (
                     <Button
                       key={label}
                       variant="outlined"
                       startIcon={icon}
                       fullWidth
-                      onClick={() =>
-                        setSocialNotice(
-                          `${label} is reserved for future release. Please sign in with Email & Password.`
-                        )
-                      }
                       sx={{
-                        py: 1.5,
+                        py: 1.3,
                         color: theme.palette.mode === 'dark' ? alpha(color, 0.9) : color,
                         borderColor: alpha(color, 0.3),
                         bgcolor: alpha(theme.palette.background.paper, 0.8),
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
                         '&:hover': {
                           borderColor: color,
-                          bgcolor: alpha(color, 0.1),
-                          transform: 'translateY(-1px)',
+                          bgcolor: alpha(color, 0.05),
                         },
                       }}
                     >
@@ -502,14 +443,6 @@ export default function AuthPage() {
                   </Typography>
                 </Box>
               </Box>
-
-              <Snackbar
-                open={Boolean(socialNotice)}
-                autoHideDuration={4000}
-                onClose={() => setSocialNotice(null)}
-                message={socialNotice}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              />
             </Paper>
           </Grid>
         </Grid>

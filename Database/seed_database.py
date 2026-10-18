@@ -42,27 +42,71 @@ def seed():
     except Exception as e:
         logger.warning(f"Note on index creation: {e}")
 
-    # Seed demo user
-    demo_user = {
-        "email": "demo@smartdiet.io",
-        "display_name": "Demo User",
-        "age": 28,
-        "gender": "Female",
-        "weight": 65,
-        "height": 168,
-        "activity_level": "Moderately Active",
-        "dietary_restrictions": ["Vegetarian"],
-        "health_conditions": [],
-        "preferred_cuisine": "Mediterranean",
-        "current_mood": "energetic"
-    }
-    users_col.update_one(
-        {"email": demo_user["email"]},
-        {"$set": demo_user},
-        upsert=True
-    )
+    # Seed both demo and test users into MongoDB
+    initial_users = [
+        {
+            "email": "demo@example.com",
+            "username": "demo",
+            "password": "password123",
+            "display_name": "Demo User",
+            "age": 26,
+            "gender": "Female",
+            "weight": 62,
+            "height": 165,
+            "activity_level": "Medium Active",
+            "dietary_restrictions": ["vegetarian"],
+            "health_conditions": [],
+            "preferred_cuisine": "North Indian",
+            "current_mood": "energetic",
+            "calorieGoal": 1850,
+            "proteinGoal": 65,
+            "carbsGoal": 230,
+            "fatGoal": 50
+        },
+        {
+            "email": "test@example.com",
+            "username": "test",
+            "password": "password123",
+            "display_name": "Test User",
+            "age": 30,
+            "gender": "Male",
+            "weight": 75,
+            "height": 178,
+            "activity_level": "Highly Active",
+            "dietary_restrictions": ["non-vegetarian"],
+            "health_conditions": [],
+            "preferred_cuisine": "Indian",
+            "current_mood": "motivated",
+            "calorieGoal": 2400,
+            "proteinGoal": 95,
+            "carbsGoal": 280,
+            "fatGoal": 65
+        },
+        {
+            "email": "demo@smartdiet.io",
+            "username": "demo_legacy",
+            "password": "password123",
+            "display_name": "Demo User (Legacy)",
+            "age": 28,
+            "gender": "Female",
+            "weight": 65,
+            "height": 168,
+            "activity_level": "Moderately Active",
+            "dietary_restrictions": ["vegetarian"],
+            "health_conditions": [],
+            "preferred_cuisine": "North Indian",
+            "current_mood": "energetic"
+        }
+    ]
 
-    logger.info(f"Successfully seeded database with {inserted_count} foods and demo user.")
+    for u in initial_users:
+        users_col.update_one(
+            {"email": u["email"]},
+            {"$set": u},
+            upsert=True
+        )
+
+    logger.info(f"Successfully seeded database with {inserted_count} foods and {len(initial_users)} users.")
     return True
 
 if __name__ == '__main__':
