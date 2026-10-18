@@ -114,10 +114,68 @@ const getRegisteredAccounts = (): Record<string, RegisteredAccount> => {
     if (updated) {
       localStorage.setItem('nutrimind_registered_accounts', JSON.stringify(parsed));
     }
-    return parsed;
   } catch {
     return DEFAULT_ACCOUNTS;
   }
+};
+
+const calculateGoals = (userData: Partial<UserData>): { calorieGoal: number; proteinGoal: number; carbsGoal: number; fatGoal: number } => {
+  const age = Number(userData.age) || 25;
+  const weight = Number(userData.weight) || 70;
+  const height = Number(userData.height) || 170;
+  const gender = (userData.gender || 'male').toLowerCase();
+
+  let bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+  if (gender === 'female') {
+    bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+  }
+
+  const actStr = (userData.activity_level || '').toLowerCase();
+  let multiplier = 1.375;
+  if (actStr.includes('not') || actStr.includes('sedentary')) multiplier = 1.2;
+  else if (actStr.includes('less') || actStr.includes('light')) multiplier = 1.375;
+  else if (actStr.includes('medium') || actStr.includes('moderate')) multiplier = 1.55;
+  else if (actStr.includes('high') || actStr.includes('very')) multiplier = 1.725;
+
+  const calorieGoal = Math.round(bmr * multiplier);
+  const proteinGoal = Math.round((calorieGoal * 0.3) / 4);
+  const carbsGoal = Math.round((calorieGoal * 0.45) / 4);
+  const fatGoal = Math.round((calorieGoal * 0.25) / 9);
+
+  return { calorieGoal, proteinGoal, carbsGoal, fatGoal };
+};
+
+const syncProfileFromBackend = async (email: string) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/users/profile?email=${encodeURIComponent(email)}`);
+    if (!res.ok) return null;
+    const mongoData = await res.json();
+    if (mongoData && (mongoData.age !== undefined || mongoData.weight !== undefined || mongoData.gender !== undefined)) {
+      const goals = calculateGoals(mongoData);
+      const mergedUserData: UserData = {
+        age: Number(mongoData.age),
+        gender: mongoData.gender || 'Male',
+        weight: Number(mongoData.weight),
+        height: Number(mongoData.height),
+        activity_level: mongoData.activity_level || 'Medium Active',
+        dietary_restrictions: mongoData.dietary_restrictions || [],
+        health_conditions: mongoData.health_conditions || [],
+        preferred_cuisine: mongoData.preferred_cuisine || 'Indian',
+        current_mood: mongoData.current_mood || 'neutral',
+        calorieGoal: mongoData.calorieGoal || goals.calorieGoal,
+        proteinGoal: mongoData.proteinGoal || goals.proteinGoal,
+        carbsGoal: mongoData.carbsGoal || goals.carbsGoal,
+        fatGoal: mongoData.fatGoal || goals.fatGoal,
+      };
+      return {
+        mongoData,
+        mergedUserData
+      };
+    }
+  } catch (err) {
+    console.warn('Backend sync failed:', err);
+  }
+  return null;
 };
 
 interface UserContextType {
@@ -131,6 +189,7 @@ interface UserContextType {
   toggleTheme: () => void;
   updateUserData: (data: UserData) => Promise<void>;
   getUserData: () => UserData | undefined;
+  refreshUserData: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -166,6 +225,22 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           }
         }
         setUser(parsedUser);
+
+        // Immediately fetch fresh profile from MongoDB to reflect any Compass/direct DB changes
+        if (parsedUser.email) {
+          syncProfileFromBackend(parsedUser.email).then((result) => {
+            if (result) {
+              const updatedUser: User = {
+                ...parsedUser,
+                displayName: result.mongoData.display_name || parsedUser.displayName,
+                userData: result.mergedUserData,
+              };
+              setUser(updatedUser);
+              localStorage.setItem('user', JSON.stringify(updatedUser));
+              localStorage.setItem(`userData_${parsedUser.email}`, JSON.stringify(result.mergedUserData));
+            }
+          });
+        }
       } catch (e) {
         localStorage.removeItem('user');
       }
@@ -209,9 +284,17 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Check if user has saved profile in localStorage
-      const savedUserData =
+      let savedUserData =
         account.userData ||
         JSON.parse(localStorage.getItem(`userData_${account.email}`) || 'null');
+
+      // Fetch fresh profile from MongoDB if available
+      try {
+        const result = await syncProfileFromBackend(account.email);
+        if (result) {
+          savedUserData = result.mergedUserData;
+        }
+      } catch {}
 
       const loggedInUser: User = {
         uid: account.uid,
@@ -366,6 +449,45 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return user?.userData;
   };
 
+  const refreshUserData = async () => {
+    const targetEmail =
+      user?.email ||
+      (() => {
+        try {
+          const saved = localStorage.getItem('user');
+          return saved ? JSON.parse(saved)?.email : null;
+        } catch {
+          return null;
+        }
+      })();
+
+    if (!targetEmail) return;
+
+    try {
+      const result = await syncProfileFromBackend(targetEmail);
+      if (result) {
+        setUser((prev) => {
+          const base: User = prev || {
+            uid: result.mongoData._id || `user_${Date.now()}`,
+            email: targetEmail,
+            displayName: result.mongoData.display_name || targetEmail.split('@')[0],
+            photoURL: null,
+          };
+          const updatedUser: User = {
+            ...base,
+            displayName: result.mongoData.display_name || base.displayName,
+            userData: result.mergedUserData,
+          };
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          localStorage.setItem(`userData_${targetEmail}`, JSON.stringify(result.mergedUserData));
+          return updatedUser;
+        });
+      }
+    } catch (e) {
+      console.warn('refreshUserData failed:', e);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -379,6 +501,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         toggleTheme,
         updateUserData,
         getUserData,
+        refreshUserData,
       }}
     >
       {children}

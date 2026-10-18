@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -8,6 +8,9 @@ import {
   Button,
   Avatar,
   Chip,
+  IconButton,
+  Tooltip,
+  CircularProgress,
   useTheme,
   alpha,
   Container,
@@ -22,6 +25,7 @@ import {
   MonitorWeight as WeightIcon,
   Height as HeightIcon,
   Favorite as FavoriteIcon,
+  Sync as SyncIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -32,8 +36,24 @@ const MotionPaper = motion(Paper);
 export default function UserProfile() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { user, getUserData } = useUser();
+  const { user, getUserData, refreshUserData } = useUser();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const userData = getUserData();
+
+  useEffect(() => {
+    if (refreshUserData) {
+      setIsRefreshing(true);
+      refreshUserData().finally(() => setIsRefreshing(false));
+    }
+  }, []);
+
+  const handleManualSync = async () => {
+    if (refreshUserData) {
+      setIsRefreshing(true);
+      await refreshUserData();
+      setIsRefreshing(false);
+    }
+  };
 
   const displayName = user?.displayName || user?.email?.split('@')[0] || 'User';
   const email = user?.email || 'user@example.com';
@@ -127,13 +147,37 @@ export default function UserProfile() {
               {email}
             </Typography>
           </Box>
-          <Chip
-            label={userData ? 'Profile Active' : 'Setup Required'}
-            color={userData ? 'success' : 'warning'}
-            variant="outlined"
-            size="small"
-            sx={{ fontWeight: 600 }}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Tooltip title="Sync with MongoDB Database">
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={handleManualSync}
+                  disabled={isRefreshing}
+                  sx={{
+                    bgcolor: alpha(theme.palette.primary.main, 0.1),
+                    color: 'primary.main',
+                    '&:hover': {
+                      bgcolor: alpha(theme.palette.primary.main, 0.2),
+                    },
+                  }}
+                >
+                  {isRefreshing ? (
+                    <CircularProgress size={18} color="inherit" />
+                  ) : (
+                    <SyncIcon fontSize="small" />
+                  )}
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Chip
+              label={userData ? 'Profile Active' : 'Setup Required'}
+              color={userData ? 'success' : 'warning'}
+              variant="outlined"
+              size="small"
+              sx={{ fontWeight: 600 }}
+            />
+          </Box>
         </Box>
 
         <Divider sx={{ my: 3 }} />
