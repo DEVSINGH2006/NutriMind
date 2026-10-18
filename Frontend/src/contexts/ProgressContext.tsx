@@ -48,86 +48,87 @@ interface ProgressContextType {
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
+const INITIAL_ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'first_week',
+    title: 'Week 1 Champion',
+    description: "You've completed your first week of diet planning 🎉",
+    icon: 'EmojiEvents',
+    category: 'milestone',
+    points: 50,
+    progress: 0,
+    total: 7,
+    unlocked: false,
+    rarity: 'rare'
+  },
+  {
+    id: 'first_meal',
+    title: 'Healthy Start',
+    description: 'Log and complete your first meal of the day',
+    icon: 'CheckCircle',
+    category: 'daily',
+    points: 25,
+    progress: 0,
+    total: 1,
+    unlocked: false,
+    rarity: 'common'
+  },
+  {
+    id: 'daily_champion',
+    title: 'Clean Plate',
+    description: 'Completed all 3 meals of the day (Breakfast, Lunch & Dinner)',
+    icon: 'Whatshot',
+    category: 'daily',
+    points: 50,
+    progress: 0,
+    total: 3,
+    unlocked: false,
+    rarity: 'rare'
+  },
+  {
+    id: 'perfect_week',
+    title: 'Perfect Week',
+    description: 'Complete all meals for 7 days straight',
+    icon: 'EmojiEvents',
+    category: 'streak',
+    points: 100,
+    progress: 0,
+    total: 7,
+    unlocked: false,
+    rarity: 'epic'
+  },
+  {
+    id: 'protein_champion',
+    title: 'Protein Champion',
+    description: 'Meet protein goals for 5 consecutive days',
+    icon: 'Whatshot',
+    category: 'nutrition',
+    points: 75,
+    progress: 0,
+    total: 5,
+    unlocked: false,
+    rarity: 'rare'
+  },
+  {
+    id: 'hydration_master',
+    title: 'Hydration Master',
+    description: 'Drink 2L of water daily for 3 days',
+    icon: 'WaterDrop',
+    category: 'nutrition',
+    points: 50,
+    progress: 0,
+    total: 3,
+    unlocked: false,
+    rarity: 'common'
+  }
+];
+
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
   const [mealProgress, setMealProgress] = useState<MealProgress[]>([]);
-  const [achievements, setAchievements] = useState<Achievement[]>([
-    {
-      id: 'first_week',
-      title: 'Week 1 Champion',
-      description: "You've completed your first week of diet planning 🎉",
-      icon: 'EmojiEvents',
-      category: 'milestone',
-      points: 50,
-      progress: 7,
-      total: 7,
-      unlocked: true,
-      unlockedAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
-      rarity: 'rare'
-    },
-    {
-      id: 'first_meal',
-      title: 'Healthy Start',
-      description: 'Log and complete your first meal of the day',
-      icon: 'CheckCircle',
-      category: 'daily',
-      points: 25,
-      progress: 0,
-      total: 1,
-      unlocked: false,
-      rarity: 'common'
-    },
-    {
-      id: 'daily_champion',
-      title: 'Clean Plate',
-      description: 'Completed all 3 meals of the day (Breakfast, Lunch & Dinner)',
-      icon: 'Whatshot',
-      category: 'daily',
-      points: 50,
-      progress: 0,
-      total: 3,
-      unlocked: false,
-      rarity: 'rare'
-    },
-    {
-      id: 'perfect_week',
-      title: 'Perfect Week',
-      description: 'Complete all meals for 7 days straight',
-      icon: 'EmojiEvents',
-      category: 'streak',
-      points: 100,
-      progress: 0,
-      total: 7,
-      unlocked: false,
-      rarity: 'epic'
-    },
-    {
-      id: 'protein_champion',
-      title: 'Protein Champion',
-      description: 'Meet protein goals for 5 consecutive days',
-      icon: 'Whatshot',
-      category: 'nutrition',
-      points: 75,
-      progress: 0,
-      total: 5,
-      unlocked: false,
-      rarity: 'rare'
-    },
-    {
-      id: 'hydration_master',
-      title: 'Hydration Master',
-      description: 'Drink 2L of water daily for 3 days',
-      icon: 'WaterDrop',
-      category: 'nutrition',
-      points: 50,
-      progress: 0,
-      total: 3,
-      unlocked: false,
-      rarity: 'common'
-    }
-  ]);
+  const [achievements, setAchievements] = useState<Achievement[]>(INITIAL_ACHIEVEMENTS);
 
-  // Load progress and achievements from localStorage on mount
+  // Load progress and achievements from localStorage on mount or when user changes
   useEffect(() => {
     const userKey = user ? user.uid : 'default';
     const savedProgress = localStorage.getItem(`progress_${userKey}`);
@@ -136,34 +137,43 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         setMealProgress(JSON.parse(savedProgress));
       } catch (e) {
         console.error('Error loading progress:', e);
+        setMealProgress([]);
       }
+    } else {
+      setMealProgress([]);
     }
+
     const savedAchievements = localStorage.getItem(`achievements_${userKey}`);
     if (savedAchievements) {
       try {
         const parsed = JSON.parse(savedAchievements);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setAchievements(prev => {
-            return prev.map(def => {
-              const saved = parsed.find((p: Achievement) => p.id === def.id);
-              return saved ? { ...def, ...saved } : def;
-            });
-          });
+          setAchievements(INITIAL_ACHIEVEMENTS.map(def => {
+            const saved = parsed.find((p: Achievement) => p.id === def.id);
+            return saved ? { ...def, ...saved } : def;
+          }));
+        } else {
+          setAchievements(INITIAL_ACHIEVEMENTS);
         }
       } catch (e) {
         console.error('Error loading achievements:', e);
+        setAchievements(INITIAL_ACHIEVEMENTS);
       }
+    } else {
+      setAchievements(INITIAL_ACHIEVEMENTS);
     }
-  }, [user]);
+  }, [user?.uid]);
 
   // Save progress and achievements to localStorage whenever they change
   useEffect(() => {
-    const userKey = user ? user.uid : 'default';
+    if (!user) return;
+    const userKey = user.uid;
     localStorage.setItem(`progress_${userKey}`, JSON.stringify(mealProgress));
   }, [mealProgress, user]);
 
   useEffect(() => {
-    const userKey = user ? user.uid : 'default';
+    if (!user) return;
+    const userKey = user.uid;
     localStorage.setItem(`achievements_${userKey}`, JSON.stringify(achievements));
   }, [achievements, user]);
 
@@ -257,9 +267,12 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
       switch (achievement.id) {
         case 'first_week':
-          progress = 7;
-          unlocked = true;
-          if (!achievement.unlockedAt) {
+          const daysWithCompleted = mealProgress.filter(
+            p => p.meals.breakfast || p.meals.lunch || p.meals.dinner
+          ).length;
+          progress = Math.min(7, daysWithCompleted);
+          if (progress >= 7 && !unlocked) {
+            unlocked = true;
             achievement.unlockedAt = new Date().toISOString();
           }
           break;

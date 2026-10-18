@@ -135,19 +135,29 @@ export default function UserForm({ onSubmit }: UserFormProps) {
   const handleDietaryToggle = (diet: string) => {
     setFormData((prev) => ({
       ...prev,
-      dietaryRestrictions: prev.dietaryRestrictions.includes(diet)
-        ? prev.dietaryRestrictions.filter((d) => d !== diet)
-        : [...prev.dietaryRestrictions, diet],
+      dietaryRestrictions: prev.dietaryRestrictions.includes(diet) ? [] : [diet],
     }));
   };
 
   const handleHealthToggle = (condition: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      healthConditions: prev.healthConditions.includes(condition)
-        ? prev.healthConditions.filter((c) => c !== condition)
-        : [...prev.healthConditions, condition],
-    }));
+    setFormData((prev) => {
+      const prevConditions = prev.healthConditions;
+      if (condition === 'None') {
+        return {
+          ...prev,
+          healthConditions: prevConditions.includes('None') ? [] : ['None'],
+        };
+      } else {
+        const withoutNone = prevConditions.filter((c) => c !== 'None');
+        const next = withoutNone.includes(condition)
+          ? withoutNone.filter((c) => c !== condition)
+          : [...withoutNone, condition];
+        return {
+          ...prev,
+          healthConditions: next,
+        };
+      }
+    });
   };
 
   const getStepContent = (step: number) => {

@@ -92,12 +92,33 @@ export default function Progress() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [expandedDay, setExpandedDay] = useState<number | null>(null);
   const { mealProgress, weeklyProgress } = useProgress();
-  const { getUserData } = useUser();
+  const { getUserData, user } = useUser();
   const userData = getUserData();
 
-  // Get the last 7 days of progress
-  const last7Days = [...Array(7)].map((_, i) => {
-    const date = format(subDays(new Date(), i), 'yyyy-MM-dd');
+  // Determine how many days to show:
+  // For a newly created account, only show days from the account creation date onwards (max 7 days up to today)
+  const accountCreatedDate = (() => {
+    if (user?.createdAt) return new Date(user.createdAt);
+    try {
+      const accounts = JSON.parse(localStorage.getItem('nutrimind_registered_accounts') || '{}');
+      if (user?.email && accounts[user.email.toLowerCase()]?.createdAt) {
+        return new Date(accounts[user.email.toLowerCase()].createdAt);
+      }
+    } catch {}
+    return new Date();
+  })();
+
+  const todayDate = new Date();
+  const startOfCreated = new Date(accountCreatedDate.getFullYear(), accountCreatedDate.getMonth(), accountCreatedDate.getDate()).getTime();
+  const startOfToday = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime();
+  const daysSinceCreation = Math.max(0, Math.floor((startOfToday - startOfCreated) / (1000 * 60 * 60 * 24)));
+
+  // Show at least 1 day (today), capped at 7 days
+  const numDaysToShow = Math.min(7, daysSinceCreation + 1);
+
+  // Generate days array from registration date (capped at 7) up to today
+  const displayedDays = [...Array(numDaysToShow)].map((_, i) => {
+    const date = format(subDays(todayDate, i), 'yyyy-MM-dd');
     const dayProgress = mealProgress.find(p => p.date === date) || {
       date,
       calories: 0,
@@ -127,16 +148,16 @@ export default function Progress() {
     return 'error';
   };
 
-  // Calculate weekly stats
+  // Calculate weekly stats based on displayed days
   const weeklyStats = {
-    avgCalories: Math.round(last7Days.reduce((acc, day) => acc + day.calories, 0) / 7),
-    avgProtein: Math.round(last7Days.reduce((acc, day) => acc + day.protein, 0) / 7),
-    avgCarbs: Math.round(last7Days.reduce((acc, day) => acc + day.carbs, 0) / 7),
-    avgFat: Math.round(last7Days.reduce((acc, day) => acc + day.fat, 0) / 7),
-    completedMeals: last7Days.reduce((acc, day) => 
+    avgCalories: Math.round(displayedDays.reduce((acc, day) => acc + day.calories, 0) / (displayedDays.length || 1)),
+    avgProtein: Math.round(displayedDays.reduce((acc, day) => acc + day.protein, 0) / (displayedDays.length || 1)),
+    avgCarbs: Math.round(displayedDays.reduce((acc, day) => acc + day.carbs, 0) / (displayedDays.length || 1)),
+    avgFat: Math.round(displayedDays.reduce((acc, day) => acc + day.fat, 0) / (displayedDays.length || 1)),
+    completedMeals: displayedDays.reduce((acc, day) => 
       acc + Object.values(day.meals).filter(Boolean).length, 0
     ),
-    totalMeals: last7Days.length * 4 // 4 meals per day including snacks
+    totalMeals: displayedDays.length * 4 // 4 meals per day including snacks
   };
 
   // Animation variants
@@ -262,7 +283,7 @@ export default function Progress() {
         Daily Breakdown
       </Typography>
       <Grid container spacing={3}>
-        {last7Days.map((day, index) => (
+        {displayedDays.map((day, index) => (
           <Grid item xs={12} key={day.date}>
             <MotionCard
               variants={itemVariants}

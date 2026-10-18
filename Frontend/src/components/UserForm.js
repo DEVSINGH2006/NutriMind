@@ -20,6 +20,7 @@ const ACTIVITY_LEVELS = [
 ];
 
 const DIETARY_RESTRICTIONS = [
+  'None',
   'Vegetarian',
   'Non-Vegetarian',
   'Vegan',
@@ -51,12 +52,35 @@ function UserForm({ onSubmit }) {
     }));
   };
 
-  const handleMultiSelect = (e, field) => {
-    const { value } = e.target;
+  const handleDietaryChange = (e) => {
+    const val = e.target.value;
     setFormData(prev => ({
       ...prev,
-      [field]: typeof value === 'string' ? value.split(',') : value
+      dietary_restrictions: val ? [val] : []
     }));
+  };
+
+  const handleHealthConditionsChange = (e) => {
+    const { value } = e.target;
+    const newConditions = typeof value === 'string' ? value.split(',') : value;
+    const prevConditions = formData.health_conditions || [];
+
+    const justAdded = newConditions.filter(item => !prevConditions.includes(item));
+
+    if (justAdded.includes('None')) {
+      // User just selected None -> clear all other conditions
+      setFormData(prev => ({
+        ...prev,
+        health_conditions: ['None']
+      }));
+    } else {
+      // User selected other condition(s) -> strip out 'None'
+      const withoutNone = newConditions.filter(item => item !== 'None');
+      setFormData(prev => ({
+        ...prev,
+        health_conditions: withoutNone
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -136,19 +160,19 @@ function UserForm({ onSubmit }) {
       </FormControl>
 
       <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Dietary Restrictions</InputLabel>
+        <InputLabel id="dietary-restrictions-label">Dietary Restrictions</InputLabel>
         <Select
-          multiple
+          labelId="dietary-restrictions-label"
           name="dietary_restrictions"
-          value={formData.dietary_restrictions}
-          onChange={(e) => handleMultiSelect(e, 'dietary_restrictions')}
+          value={formData.dietary_restrictions[0] || ''}
+          onChange={handleDietaryChange}
           input={<OutlinedInput label="Dietary Restrictions" />}
           renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
+            selected ? (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                <Chip label={selected} />
+              </Box>
+            ) : null
           )}
         >
           {DIETARY_RESTRICTIONS.map(restriction => (
@@ -157,16 +181,17 @@ function UserForm({ onSubmit }) {
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText>Optional: Select any dietary restrictions</FormHelperText>
+        <FormHelperText>Select any one dietary restriction</FormHelperText>
       </FormControl>
 
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Health Conditions</InputLabel>
+        <InputLabel id="health-conditions-label">Health Conditions</InputLabel>
         <Select
           multiple
+          labelId="health-conditions-label"
           name="health_conditions"
           value={formData.health_conditions}
-          onChange={(e) => handleMultiSelect(e, 'health_conditions')}
+          onChange={handleHealthConditionsChange}
           input={<OutlinedInput label="Health Conditions" />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -182,7 +207,7 @@ function UserForm({ onSubmit }) {
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText>Optional: Select any health conditions</FormHelperText>
+        <FormHelperText>Optional: Select health conditions (or None)</FormHelperText>
       </FormControl>
 
       <Button

@@ -23,6 +23,7 @@ export interface User {
   displayName: string | null;
   photoURL: string | null;
   userData?: UserData;
+  createdAt?: string;
 }
 
 interface RegisteredAccount {
@@ -155,6 +156,15 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     if (savedUser) {
       try {
         const parsedUser = JSON.parse(savedUser);
+        if (!parsedUser.createdAt && parsedUser.email) {
+          const accounts = getRegisteredAccounts();
+          const acc = Object.values(accounts).find(
+            (a) => a.email.toLowerCase() === parsedUser.email.toLowerCase()
+          );
+          if (acc?.createdAt) {
+            parsedUser.createdAt = acc.createdAt;
+          }
+        }
         setUser(parsedUser);
       } catch (e) {
         localStorage.removeItem('user');
@@ -209,6 +219,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         displayName: account.displayName || account.email.split('@')[0],
         photoURL: null,
         userData: savedUserData || undefined,
+        createdAt: account.createdAt,
       };
 
       setUser(loggedInUser);
@@ -280,6 +291,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         email: newAccount.email,
         displayName: newAccount.displayName,
         photoURL: null,
+        createdAt: newAccount.createdAt,
       };
 
       setUser(registeredUser);
