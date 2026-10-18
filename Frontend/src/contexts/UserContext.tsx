@@ -191,7 +191,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (!account) {
-        throw new Error('Account not found. Only demo and test accounts are pre-configured with password "password123". Please Sign Up to create your account.');
+        throw new Error('Account not found. Please Sign Up to create your account.');
       }
 
       if (account.password !== cleanPass) {
