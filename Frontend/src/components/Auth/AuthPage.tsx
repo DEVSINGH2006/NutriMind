@@ -14,6 +14,8 @@ import {
   useMediaQuery,
   Container,
   Grid,
+  Chip,
+  Snackbar,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import {
@@ -66,6 +68,7 @@ export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, register, isLoading } = useUser();
   const [formError, setFormError] = useState<string | null>(null);
+  const [socialNotice, setSocialNotice] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -82,10 +85,15 @@ export default function AuthPage() {
       if (isLogin) {
         await login(formData.email, formData.password);
       } else {
-        await register(formData.email, formData.password, formData.displayName);
+        await register(
+          formData.email,
+          formData.password,
+          formData.displayName,
+          formData.username
+        );
       }
-    } catch (error) {
-      setFormError('Authentication failed. Please check your credentials.');
+    } catch (error: any) {
+      setFormError(error?.message || 'Authentication failed. Please check your credentials.');
     }
   };
 
@@ -237,6 +245,70 @@ export default function AuthPage() {
                 {isLogin ? 'Welcome Back!' : 'Create Account'}
               </Typography>
 
+              {isLogin && (
+                <Box
+                  sx={{
+                    mb: 2,
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    border: `1px dashed ${alpha(theme.palette.primary.main, 0.3)}`,
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      fontWeight: 700,
+                      color: theme.palette.primary.main,
+                      mb: 0.8,
+                      letterSpacing: '0.3px',
+                    }}
+                  >
+                    PRE-CONFIGURED ACCOUNTS (PASSWORD: password123)
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    <Chip
+                      label="Demo: demo"
+                      size="small"
+                      clickable
+                      color="primary"
+                      variant="outlined"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          email: 'demo',
+                          password: 'password123',
+                        })
+                      }
+                      sx={{ fontWeight: 600 }}
+                    />
+                    <Chip
+                      label="Test: test"
+                      size="small"
+                      clickable
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          email: 'test',
+                          password: 'password123',
+                        })
+                      }
+                      sx={{ fontWeight: 600 }}
+                    />
+                  </Box>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: 'block', mt: 0.8, fontSize: '0.75rem' }}
+                  >
+                    New users must click <strong>Sign Up</strong> below to register an account.
+                  </Typography>
+                </Box>
+              )}
+
               <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -385,6 +457,11 @@ export default function AuthPage() {
                       variant="outlined"
                       startIcon={icon}
                       fullWidth
+                      onClick={() =>
+                        setSocialNotice(
+                          `${label} is reserved for future release. Please sign in with Email & Password.`
+                        )
+                      }
                       sx={{
                         py: 1.5,
                         color: theme.palette.mode === 'dark' ? alpha(color, 0.9) : color,
@@ -407,7 +484,10 @@ export default function AuthPage() {
                     {isLogin ? "Don't have an account? " : 'Already have an account? '}
                     <Button
                       color="primary"
-                      onClick={() => setIsLogin(!isLogin)}
+                      onClick={() => {
+                        setIsLogin(!isLogin);
+                        setFormError(null);
+                      }}
                       sx={{ 
                         textTransform: 'none',
                         fontWeight: 600,
@@ -422,6 +502,14 @@ export default function AuthPage() {
                   </Typography>
                 </Box>
               </Box>
+
+              <Snackbar
+                open={Boolean(socialNotice)}
+                autoHideDuration={4000}
+                onClose={() => setSocialNotice(null)}
+                message={socialNotice}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              />
             </Paper>
           </Grid>
         </Grid>

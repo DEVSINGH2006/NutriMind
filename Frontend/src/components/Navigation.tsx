@@ -22,6 +22,16 @@ import {
   Switch,
   Container,
   alpha,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  FormGroup,
+  FormControlLabel,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -42,6 +52,8 @@ import {
   TrendingUp as TrendingUpIcon,
   LocalDining as LocalDiningIcon,
   Assessment,
+  ExpandMore as ExpandMoreIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 import { useUser } from '../contexts/UserContext';
 import { useProgress, Achievement } from '../contexts/ProgressContext';
@@ -62,6 +74,8 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
   const { achievements } = useProgress();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const unlockedAchievements = achievements.filter(a => a.unlocked);
 
@@ -402,6 +416,7 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
           >
             <Tooltip title="Help Center">
               <IconButton 
+                onClick={() => setHelpOpen(true)}
                 sx={{ 
                   color: theme.palette.text.secondary,
                   '&:hover': {
@@ -543,13 +558,13 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
           </Typography>
         </Box>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={() => { handleClose(); navigate('/form'); }}>
           <ListItemIcon>
             <AccountCircleIcon fontSize="small" />
           </ListItemIcon>
           Your Profile
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => { handleClose(); setSettingsOpen(true); }}>
           <ListItemIcon>
             <SettingsIcon fontSize="small" />
           </ListItemIcon>
@@ -672,6 +687,154 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
           </Typography>
         </Box>
       </Menu>
+
+      {/* Help Center Dialog */}
+      <Dialog 
+        open={helpOpen} 
+        onClose={() => setHelpOpen(false)} 
+        maxWidth="sm" 
+        fullWidth
+        PaperProps={{
+          sx: { borderRadius: 3, p: 1 }
+        }}
+      >
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <HelpIcon color="primary" />
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              NutriMind Help Center & Nutrition Guide
+            </Typography>
+          </Box>
+          <IconButton size="small" onClick={() => setHelpOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          <Accordion defaultExpanded>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ fontWeight: 600 }}>How does NutriMind generate my diet plan?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" color="text.secondary">
+                NutriMind uses your biometric profile (age, gender, height, weight, activity level) to calculate your Basal Metabolic Rate (BMR) via the Mifflin-St Jeor equation. We then apply your Total Daily Energy Expenditure (TDEE) multiplier and balance meal portions with exact gram-weight Indian household foods to hit your protein, carbohydrate, and healthy fat targets.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ fontWeight: 600 }}>How do I track and complete my daily meals?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" color="text.secondary">
+                Simply click on any meal on your Dashboard or Diet Plan tab (or tap the green checkmark icon). When marked complete, your consumed calories and macronutrient progress bars automatically update and count towards daily achievements and streaks.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ fontWeight: 600 }}>What accounts can I use to sign in?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" color="text.secondary">
+                NutriMind comes pre-configured with 2 accounts: <strong>demo</strong> (password: <code>password123</code>) and <strong>test</strong> (password: <code>password123</code>). All other users can click <strong>Sign Up</strong> on the authentication page to create their personal account.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ fontWeight: 600 }}>What dietary preferences are supported?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" color="text.secondary">
+                NutriMind features authentic Indian meals categorized into <strong>Vegetarian</strong>, <strong>Non-vegetarian</strong>, <strong>Vegan</strong>, and <strong>Lactose-Free</strong> options, complete with precise gram weights for home cooking.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button variant="contained" onClick={() => setHelpOpen(false)} sx={{ borderRadius: 2 }}>
+            Got It
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Settings Dialog */}
+      <Dialog 
+        open={settingsOpen} 
+        onClose={() => setSettingsOpen(false)} 
+        maxWidth="xs" 
+        fullWidth
+        PaperProps={{
+          sx: { borderRadius: 3, p: 1 }
+        }}
+      >
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <SettingsIcon color="primary" />
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Account Settings
+            </Typography>
+          </Box>
+          <IconButton size="small" onClick={() => setSettingsOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+              Appearance
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                Dark Mode
+              </Typography>
+              <Switch checked={isDarkMode} onChange={toggleTheme} />
+            </Box>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+              Active Profile
+            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+              {user?.displayName || 'User'}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {user?.email}
+            </Typography>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+              Dietary Profile
+            </Typography>
+            <Button 
+              variant="outlined" 
+              size="small" 
+              fullWidth
+              onClick={() => {
+                setSettingsOpen(false);
+                navigate('/form');
+              }}
+              sx={{ borderRadius: 2, textTransform: 'none' }}
+            >
+              Update Health Metrics & Preferences
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button variant="contained" onClick={() => setSettingsOpen(false)} sx={{ borderRadius: 2 }}>
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 } 

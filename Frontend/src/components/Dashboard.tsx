@@ -38,6 +38,7 @@ import { useUser } from '../contexts/UserContext';
 import { useProgress, Achievement } from '../contexts/ProgressContext';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const MotionPaper = motion(Paper);
 const MotionBox = motion(Box);
@@ -59,6 +60,7 @@ const getRarityColor = (rarity: string) => {
 
 export default function Dashboard() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { user, getUserData } = useUser();
   const { 
@@ -754,7 +756,9 @@ export default function Dashboard() {
                       <MotionListItem
                         key={achievement.id}
                         variants={itemVariants}
+                        onClick={() => navigate('/achievements')}
                         sx={{
+                          cursor: 'pointer',
                           borderRadius: '12px',
                           mb: 2,
                           background: theme.palette.mode === 'dark'
