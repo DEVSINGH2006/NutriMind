@@ -114,6 +114,7 @@ const getRegisteredAccounts = (): Record<string, RegisteredAccount> => {
     if (updated) {
       localStorage.setItem('nutrimind_registered_accounts', JSON.stringify(parsed));
     }
+    return parsed;
   } catch {
     return DEFAULT_ACCOUNTS;
   }
