@@ -205,16 +205,9 @@ export default function Progress() {
               label: 'Meals Completed',
               value: `${weeklyStats.completedMeals}/${weeklyStats.totalMeals}`,
               color: '#FBBF24'
-            },
-            {
-              icon: <WaterDropIcon />,
-              label: 'Hydration',
-              value: `${Math.round((last7Days.reduce((acc, day) => acc + day.water, 0) / 7) / 1000)}L`,
-              target: 2,
-              color: '#60A5FA'
             }
           ].map((stat, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid item xs={12} sm={4} md={4} key={index}>
               <MotionPaper
                 variants={itemVariants}
                 sx={{

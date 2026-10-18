@@ -60,7 +60,7 @@ import { useProgress, Achievement } from '../contexts/ProgressContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavigationProps {
-  currentPage: 'form' | 'plan' | 'dashboard' | 'progress' | 'achievements';
+  currentPage: 'form' | 'plan' | 'dashboard' | 'progress' | 'achievements' | 'profile';
   isOpen: boolean;
   onToggle: () => void;
   showBackButton?: boolean;
@@ -558,7 +558,7 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
           </Typography>
         </Box>
         <Divider />
-        <MenuItem onClick={() => { handleClose(); navigate('/form'); }}>
+        <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}>
           <ListItemIcon>
             <AccountCircleIcon fontSize="small" />
           </ListItemIcon>
@@ -732,16 +732,6 @@ export default function Navigation({ currentPage, isOpen, onToggle, showBackButt
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography sx={{ fontWeight: 600 }}>What accounts can I use to sign in?</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant="body2" color="text.secondary">
-                NutriMind comes pre-configured with 2 accounts: <strong>demo</strong> (password: <code>password123</code>) and <strong>test</strong> (password: <code>password123</code>). All other users can click <strong>Sign Up</strong> on the authentication page to create their personal account.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
 
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>

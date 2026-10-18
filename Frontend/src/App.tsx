@@ -15,6 +15,7 @@ import Dashboard from './components/Dashboard';
 import Progress from './components/Progress';
 import Achievements from './components/Achievements';
 import LoadingAnimation from './components/LoadingAnimation';
+import UserProfile from './components/UserProfile';
 import { lightTheme, darkTheme } from './theme';
 import { generateDietPlan } from './api/mockApi';
 import type { DietPlan as DietPlanType } from './api/mockApi';
@@ -98,6 +99,7 @@ function ThemedApp() {
     if (path === '/plan') return 'plan';
     if (path === '/progress') return 'progress';
     if (path === '/achievements') return 'achievements';
+    if (path === '/profile') return 'profile';
     return 'dashboard';
   };
   
@@ -118,7 +120,7 @@ function ThemedApp() {
           currentPage={getCurrentPage()} 
           isOpen={isSidebarOpen}
           onToggle={toggleSidebar}
-          showBackButton={getCurrentPage() === 'plan'}
+          showBackButton={getCurrentPage() === 'plan' || getCurrentPage() === 'profile'}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
           <Routes>
@@ -169,6 +171,14 @@ function ThemedApp() {
               element={
                 <ProtectedRoute>
                   <Achievements />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <UserProfile />
                 </ProtectedRoute>
               } 
             />
